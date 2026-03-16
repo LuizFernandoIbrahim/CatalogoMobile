@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { authenticateWithBiometrics, getBiometricTypes } from '../services/biometricService';
+import { authenticateWithBiometrics, getBiometricTypes } from '../components/biometricService';
 import { colors, gradients } from '../style/colors';
 import { typography } from '../style/typography';
 
