@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Catalogo Oficina de Marias",
+    "slug": "oficina-de-marias-v1",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAF5EE"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.oficinadmarias.app",
+      "requireFullScreen": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Use o Face ID para acessar a Oficina de Marias com segurança.",
+        "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
+        "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationPortrait"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FAF5EE"
+      },
+      "package": "com.oficinadmarias.app",
+      "screenOrientation": "portrait",
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Use o Face ID para acessar a Oficina de Marias com segurança."
+        }
+      ],
+      "expo-screen-orientation"
+    ]
+  }
+}
