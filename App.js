@@ -4,12 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import LoginScreen from './src/screens/LoginScreen';
-import HomeScreen from './src/screens/HomeScreen';
-import CartScreen from './src/screens/CartScreen';
-import { CartProvider } from './src/context/CartContext';
-import { checkBiometricAvailability } from './src/services/biometricService';
-import { colors } from './src/theme/colors';
+import LoginScreen from './src/components/LoginScreen';
+import HomeScreen from './src/components/HomeScreen';
+import CartScreen from './src/components/CartScreen';
+import { CartProvider } from './src/components/CartContext';
+import { checkBiometricAvailability } from './src/components/biometricService';
+import { colors } from './src/style/colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +18,6 @@ export default function App() {
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
 
   useEffect(() => {
-    // Trava a orientação em retrato em tempo de execução (iOS e Android)
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
     const init = async () => {
