@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Catalogo Oficina de Marias",
-    "slug": "oficina-de-marias-v1",
+    "name": "Oficina de Marias",
+    "slug": "oficina-de-marias",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,8 +16,12 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.oficinadmarias.app",
       "requireFullScreen": true,
+      "config": {
+        "googleMapsApiKey": "SUA_API_KEY_IOS_AQUI"
+      },
       "infoPlist": {
         "NSFaceIDUsageDescription": "Use o Face ID para acessar a Oficina de Marias com segurança.",
+        "NSLocationWhenInUseUsageDescription": "Usamos sua localização para mostrar sua posição no mapa da loja.",
         "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
         "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationPortrait"]
       }
@@ -29,9 +33,16 @@
       },
       "package": "com.oficinadmarias.app",
       "screenOrientation": "portrait",
+      "config": {
+        "googleMaps": {
+          "apiKey": "SUA_API_KEY_ANDROID_AQUI"
+        }
+      },
       "permissions": [
         "USE_BIOMETRIC",
-        "USE_FINGERPRINT"
+        "USE_FINGERPRINT",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
       ]
     },
     "plugins": [
@@ -41,7 +52,13 @@
           "faceIDPermission": "Use o Face ID para acessar a Oficina de Marias com segurança."
         }
       ],
-      "expo-screen-orientation"
+      "expo-screen-orientation",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Usamos sua localização para mostrar sua posição no mapa da loja."
+        }
+      ]
     ]
   }
 }
