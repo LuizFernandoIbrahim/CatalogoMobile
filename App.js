@@ -7,6 +7,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import CartScreen from './src/screens/CartScreen';
+import StoreScreen from './src/screens/StoreScreen';
 import { CartProvider } from './src/components/CartContext';
 import { checkBiometricAvailability } from './src/services/biometricService';
 import { colors } from './src/style/colors';
@@ -48,6 +49,11 @@ export default function App() {
           <Stack.Screen
             name="Cart"
             component={CartScreen}
+            options={{ animation: 'slide_from_right' }}
+          />
+          <Stack.Screen
+            name="Store"
+            component={StoreScreen}
             options={{ animation: 'slide_from_right' }}
           />
         </Stack.Navigator>

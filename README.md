@@ -20,8 +20,8 @@ npm install
 # 2. Iniciar o projeto
 npx expo start
 
-# Para iOS
+# Para iOS (Emulador)
 npx expo start --ios
 
-# Para Android
+# Para Android (Emulador)
 npx expo start --android
