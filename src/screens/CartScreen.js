@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useCart } from './CartContext';
+import { useCart } from '../components/CartContext';
 import { colors, gradients } from '../style/colors';
 import { typography } from '../style/typography';
 

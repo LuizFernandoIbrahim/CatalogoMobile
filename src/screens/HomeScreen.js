@@ -15,8 +15,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, gradients } from '../style/colors';
 import { typography } from '../style/typography';
-import { useCart } from './CartContext';
-import CartIcon from './CartIcon';
+import { useCart } from '../components/CartContext';
+import CartIcon from '../components/CartIcon';
 
 
 const CATEGORIES = [

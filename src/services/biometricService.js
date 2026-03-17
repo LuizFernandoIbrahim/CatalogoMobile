@@ -4,7 +4,6 @@ export async function checkBiometricAvailability() {
   try {
     const compatible = await LocalAuthentication.hasHardwareAsync();
     if (!compatible) return false;
-
     const enrolled = await LocalAuthentication.isEnrolledAsync();
     return enrolled;
   } catch {
@@ -26,9 +25,7 @@ export async function authenticateWithBiometrics() {
       disableDeviceFallback: false,
     });
 
-    if (result.success) {
-      return { success: true };
-    }
+    if (result.success) return { success: true }; 
 
     return {
       success: false,
