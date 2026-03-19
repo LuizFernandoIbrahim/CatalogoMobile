@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { authenticateWithBiometrics, getBiometricTypes } from '../components/biometricService';
+import { authenticateWithBiometrics, getBiometricTypes } from '../services/biometricService';
 import { colors, gradients } from '../style/colors';
 import { typography } from '../style/typography';
 
@@ -20,16 +20,14 @@ const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation, isBiometricAvailable }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [biometricType, setBiometricType] = useState(null);
+  const [biometricType, setBiometricType]       = useState(null);
 
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(40)).current;
-  const logoScale = useRef(new Animated.Value(0.8)).current;
+  const fadeAnim    = useRef(new Animated.Value(0)).current;
+  const slideAnim   = useRef(new Animated.Value(40)).current;
+  const logoScale   = useRef(new Animated.Value(0.8)).current;
   const buttonPulse = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-
     const detectType = async () => {
       const { AuthenticationType } = await import('expo-local-authentication');
       const types = await getBiometricTypes();
@@ -65,7 +63,7 @@ export default function LoginScreen({ navigation, isBiometricAvailable }) {
       const pulse = Animated.loop(
         Animated.sequence([
           Animated.timing(buttonPulse, { toValue: 1.06, duration: 900, useNativeDriver: true }),
-          Animated.timing(buttonPulse, { toValue: 1, duration: 900, useNativeDriver: true }),
+          Animated.timing(buttonPulse, { toValue: 1,    duration: 900, useNativeDriver: true }),
         ])
       );
       pulse.start();
@@ -91,9 +89,8 @@ export default function LoginScreen({ navigation, isBiometricAvailable }) {
     }
   };
 
-  const biometricIcon = biometricType === 'face' ? 'scan-outline' : 'finger-print-outline';
-  const biometricLabel =
-    biometricType === 'face' ? 'Entrar com Face ID' : 'Entrar com Digital';
+  const biometricIcon  = biometricType === 'face' ? 'scan-outline' : 'finger-print-outline';
+  const biometricLabel = biometricType === 'face' ? 'Entrar com Face ID' : 'Entrar com Digital';
 
   return (
     <KeyboardAvoidingView
@@ -114,7 +111,6 @@ export default function LoginScreen({ navigation, isBiometricAvailable }) {
         ]}
       >
         <Animated.View style={[styles.logoArea, { transform: [{ scale: logoScale }] }]}>
-
           <View style={styles.logoCircle}>
             <Text style={styles.logoEmoji}>🧵</Text>
           </View>
@@ -193,7 +189,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-
   decorCircle1: {
     position: 'absolute',
     width: 280,
@@ -234,14 +229,12 @@ const styles = StyleSheet.create({
     top: 220,
     left: 40,
   },
-
   content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
   },
-
   logoArea: {
     alignItems: 'center',
     marginBottom: 56,
@@ -262,12 +255,8 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 8,
   },
-  logoEmoji: {
-    fontSize: 44,
-  },
-  brandingText: {
-    alignItems: 'center',
-  },
+  logoEmoji: { fontSize: 44 },
+  brandingText: { alignItems: 'center' },
   brandSmall: {
     fontFamily: typography.fonts.body,
     fontSize: typography.sizes.xs,
@@ -297,7 +286,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontStyle: 'italic',
   },
-
   authArea: {
     alignItems: 'center',
     width: '100%',
@@ -322,9 +310,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     marginBottom: 14,
   },
-  biometricBtnLoading: {
-    opacity: 0.7,
-  },
+  biometricBtnLoading: { opacity: 0.7 },
   biometricBtnGradient: {
     flex: 1,
     justifyContent: 'center',
@@ -337,7 +323,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     marginBottom: 32,
   },
-
   noBiometricBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -356,7 +341,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     lineHeight: typography.sizes.sm * 1.6,
   },
-
   skipBtn: {
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -367,7 +351,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textDecorationLine: 'underline',
   },
-
   footer: {
     paddingBottom: 32,
     alignItems: 'center',

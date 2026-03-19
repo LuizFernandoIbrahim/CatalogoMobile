@@ -17,28 +17,14 @@ import { colors, gradients } from '../style/colors';
 import { typography } from '../style/typography';
 import { useCart } from '../components/CartContext';
 import CartIcon from '../components/CartIcon';
+import BottomNavBar from '../components/BottomNavBar';
+import { CATEGORIES, FEATURED } from '../data/products';
 
-
-const CATEGORIES = [
-  { id: '1', name: 'Crochê',    icon: '🧶', count: 12 },
-  { id: '2', name: 'Bordado',   icon: '🪡', count: 8  },
-  { id: '3', name: 'Macramê',   icon: '🪢', count: 6  },
-  { id: '4', name: 'Cerâmica',  icon: '🏺', count: 10 },
-  { id: '5', name: 'Patchwork', icon: '🎨', count: 5  },
-  { id: '6', name: 'Velas',     icon: '🕯️', count: 7  },
-];
-
-const FEATURED = [
-  { id: '1', name: 'Cestinha de Crochê Boho',   price: 'R$ 89,00',  emoji: '🧺', tag: 'Novo'     },
-  { id: '2', name: 'Quadro Bordado Floral',      price: 'R$ 145,00', emoji: '🌸', tag: 'Destaque' },
-  { id: '3', name: 'Painel Macramê Grande',      price: 'R$ 210,00', emoji: '🤍', tag: ''         },
-  { id: '4', name: 'Vaso de Cerâmica Rústico',   price: 'R$ 98,00',  emoji: '🏺', tag: ''         },
-  { id: '5', name: 'Kit Velas Aromáticas',       price: 'R$ 65,00',  emoji: '🕯️', tag: 'Promoção' },
-];
-
+const formatPrice = (value) =>
+  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 export default function HomeScreen({ navigation }) {
-  const fadeAnim  = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -57,7 +43,6 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primaryDark} />
 
@@ -91,12 +76,10 @@ export default function HomeScreen({ navigation }) {
         style={[styles.scroll, { opacity: fadeAnim }]}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-
         scrollEventThrottle={16}
         overScrollMode="never"
-        bounces={true}
+        bounces
       >
-
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Categorias</Text>
@@ -138,7 +121,7 @@ export default function HomeScreen({ navigation }) {
               </View>
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productPrice}>{item.price}</Text>
+                <Text style={styles.productPrice}>{formatPrice(item.price)}</Text>
                 {item.tag ? (
                   <View style={styles.productTag}>
                     <Text style={styles.productTagText}>{item.tag}</Text>
@@ -170,40 +153,18 @@ export default function HomeScreen({ navigation }) {
           </View>
           <Ionicons name="arrow-forward-circle" size={28} color={colors.primary} />
         </TouchableOpacity>
-
       </Animated.ScrollView>
 
-      <View style={styles.bottomNav}>
-        {[
-          { icon: 'home',         label: 'Início',   active: true  },
-          { icon: 'grid-outline', label: 'Catálogo', active: false },
-          { icon: 'heart-outline',label: 'Favoritos',active: false },
-          { icon: 'person-outline',label: 'Perfil',  active: false },
-        ].map((item) => (
-          <TouchableOpacity key={item.label} style={styles.navItem} activeOpacity={0.7}>
-            <Ionicons
-              name={item.icon}
-              size={22}
-              color={item.active ? colors.primary : colors.textMuted}
-            />
-            <Text style={[styles.navLabel, item.active && styles.navLabelActive]}>
-              {item.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
+      <BottomNavBar navigation={navigation} activeScreen="Home" />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-
   safeArea: {
     flex: 1,
     backgroundColor: colors.primaryDark,
   },
-
   header: {
     paddingTop: 12,
     paddingBottom: 0,
@@ -241,7 +202,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   heroBanner: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -280,7 +240,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   heroBannerEmoji: { fontSize: 52 },
-
   scroll: {
     flex: 1,
     backgroundColor: colors.background,
@@ -289,7 +248,6 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 20,
   },
-
   section: { paddingHorizontal: 20, marginTop: 24 },
   sectionHeader: {
     flexDirection: 'row',
@@ -307,9 +265,8 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.sm,
     color: colors.primary,
   },
-
   categoriesRow: {
-    paddingRight: 20,  
+    paddingRight: 20,
   },
   categoryCard: { alignItems: 'center', marginRight: 14, width: 80 },
   categoryIconBox: {
@@ -341,8 +298,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
   },
-
-
   productCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -397,7 +352,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0.3,
   },
-
   addToCartBtn: {
     width: 38,
     height: 38,
@@ -414,7 +368,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   ctaBanner: {
     marginHorizontal: 20,
     marginTop: 24,
@@ -439,29 +392,4 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.sm,
     color: colors.textMuted,
   },
-
-  bottomNav: {
-    flexDirection: 'row',
-    height: 62,
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 1,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 3,
-  },
-  navLabel: {
-    fontFamily: typography.fonts.body,
-    fontSize: 10,
-    color: colors.textMuted,
-  },
-  navLabelActive: { color: colors.primary },
 });
