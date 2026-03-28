@@ -21,6 +21,7 @@ const ICONS = {
   'Admin': '⚙️',
   'Perfil': '👤',
 };
+
 const STORAGE_VERSION = '2';
 
 function toBoolean(value) {
@@ -30,9 +31,11 @@ function toBoolean(value) {
   return false;
 }
 
+// Tab navigator separado para poder usar o hook useSafeAreaInsets
 function AppTabs({ user, onLogout }) {
   const insets = useSafeAreaInsets();
 
+  // Altura base da tab bar + espaço seguro do sistema (navigation bar Android / home indicator iOS)
   const TAB_HEIGHT = vScale(56) + insets.bottom;
 
   return (

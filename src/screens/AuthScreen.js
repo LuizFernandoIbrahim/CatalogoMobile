@@ -17,6 +17,7 @@ import {
   isBiometricsEnabled,
   setBiometricsEnabled,
   getCurrentUser,
+  getLastUser,
 } from '../utils/storage';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale } from '../utils/responsive';
 
@@ -46,20 +47,27 @@ export default function AuthScreen({ onLogin }) {
     const compatible = await LocalAuthentication.hasHardwareAsync();
     const enrolled = await LocalAuthentication.isEnrolledAsync();
     const enabled = await isBiometricsEnabled();
-    if (compatible && enrolled && enabled) {
+    const lastUser = await getLastUser();
+    if (compatible && enrolled && enabled && lastUser) {
       setBiometricsAvailable(true);
       handleBiometricLogin();
     }
   }
 
   async function handleBiometricLogin() {
-    const result = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Entre com sua biometria',
-      fallbackLabel: 'Usar senha',
-    });
-    if (result.success) {
-      const user = await getCurrentUser();
-      if (user) onLogin(sanitize(user));
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Entre com sua biometria',
+        fallbackLabel: 'Usar senha',
+        cancelLabel: 'Cancelar',
+        disableDeviceFallback: false,
+      });
+      if (result.success) {
+        const user = await getLastUser();
+        if (user) onLogin(sanitize(user));
+      }
+    } catch (e) {
+      console.log('Erro biometria:', e);
     }
   }
 
@@ -117,7 +125,7 @@ export default function AuthScreen({ onLogin }) {
           <Text style={styles.logo}>🛍️</Text>
           <Text style={styles.title}>CatalogApp</Text>
           <Text style={styles.subtitle}>
-            {mode === 'login' ? 'Bem-vindo de volta!' : 'Crie sua conta!'}
+            {mode === 'login' ? 'Bem-vindo de volta!' : 'Crie sua conta'}
           </Text>
         </View>
 

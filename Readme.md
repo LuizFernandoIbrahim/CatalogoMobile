@@ -7,4 +7,4 @@ Para iniciar o projeto:
 Desenvolvedores:
 - Luiz Fernando Ibrahim Rebello Cabral - 202010081
 - Marcos Paulo Chagas Severiano de Souza - 202310779
-- Juan Filipe Rangel - 202313159
+- Juan Filipe Rangel - 202313159 
