@@ -89,7 +89,7 @@ export default function ProfileScreen({ user, onLogout }) {
         <Text style={styles.email}>{user?.email}</Text>
         {user?.isAdmin && (
           <View style={styles.adminBadge}>
-            <Text style={styles.adminBadgeText}>👑 Admin</Text>
+            <Text style={styles.adminBadgeText}>Admin</Text>
           </View>
         )}
       </View>
@@ -104,13 +104,14 @@ export default function ProfileScreen({ user, onLogout }) {
           <Switch
             value={biometrics}
             onValueChange={toggleBiometrics}
-            trackColor={{ true: '#4f46e5', false: '#d1d5db' }}
+            trackColor={{ true: '#bba79d', false: '#D1D5DB' }}
+            thumbColor={biometrics ? "#402105" : "#F4F3F4"}
           />
         </View>
       </View>
 
       <TouchableOpacity style={[styles.logoutBtn, { marginBottom: SPACE.xl + insets.bottom }]} onPress={handleLogout}>
-        <Text style={styles.logoutText}>🚪 Sair da conta</Text>
+        <Text style={styles.logoutText}>Sair da conta</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -119,7 +120,7 @@ export default function ProfileScreen({ user, onLogout }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f3f4f6' },
   header: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#402105',
     alignItems: 'center',
     paddingTop: SPACE.xl,
     paddingBottom: SPACE.xxl,
@@ -127,13 +128,13 @@ const styles = StyleSheet.create({
   avatarWrapper: { position: 'relative' },
   avatar: { borderWidth: 3, borderColor: '#fff' },
   avatarPlaceholder: {
-    backgroundColor: '#818cf8',
+    backgroundColor: '#ffd3a2',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
     borderColor: '#fff',
   },
-  avatarInitial: { fontSize: mScale(36), color: '#fff', fontWeight: '800' },
+  avatarInitial: { fontSize: mScale(36), color: '#402105', fontWeight: '800' },
   cameraBadge: {
     position: 'absolute',
     bottom: 0,

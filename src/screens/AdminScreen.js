@@ -17,8 +17,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { getProducts, saveProduct, updateProduct, deleteProduct } from '../utils/storage';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
-const CATEGORIES = ['Roupas', 'Calçados', 'Acessórios', 'Outros'];
-const EMPTY_FORM = { name: '', price: '', category: 'Roupas', description: '', photo: null };
+const CATEGORIES = ['Todos', 'Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
+const EMPTY_FORM = { name: '', price: '', category: 'Todos', description: '', photo: null };
 const THUMB = scale(56);
 
 export default function AdminScreen() {
@@ -90,7 +90,7 @@ export default function AdminScreen() {
           <Image source={{ uri: item.photo }} style={styles.thumb} />
         ) : (
           <View style={styles.thumbPlaceholder}>
-            <Text style={{ fontSize: mScale(22) }}>📦</Text>
+            <Text style={{ fontSize: mScale(22) }}>▧</Text>
           </View>
         )}
         <View style={styles.cardInfo}>
@@ -100,10 +100,10 @@ export default function AdminScreen() {
         </View>
         <View style={styles.cardActions}>
           <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(item)}>
-            <Text style={styles.actionIcon}>✏️</Text>
+            <Text style={styles.actionIcon}>✎</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
-            <Text style={styles.actionIcon}>🗑️</Text>
+            <Text style={styles.actionIcon}>🗑</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -116,7 +116,7 @@ export default function AdminScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.adminBanner}>
-        <Text style={styles.adminBannerText}>🔐 Modo Administrador</Text>
+        <Text style={styles.adminBannerText}>Modo Administrador</Text>
       </View>
 
       <FlatList
@@ -146,7 +146,7 @@ export default function AdminScreen() {
               {form.photo ? (
                 <Image source={{ uri: form.photo }} style={styles.photoPreview} />
               ) : (
-                <Text style={styles.photoPlaceholderText}>📷 Adicionar foto</Text>
+                <Text style={styles.photoPlaceholderText}>Adicionar foto</Text>
               )}
             </TouchableOpacity>
 
@@ -187,7 +187,7 @@ export default function AdminScreen() {
             </View>
 
             <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-              <Text style={styles.saveBtnText}>💾 Salvar</Text>
+              <Text style={styles.saveBtnText}>Salvar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancelBtn} onPress={() => setModalVisible(false)}>
               <Text style={styles.cancelBtnText}>Cancelar</Text>
@@ -202,13 +202,13 @@ export default function AdminScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f3f4f6' },
   adminBanner: {
-    backgroundColor: '#fef3c7',
+    backgroundColor: '#ffdebbd8',
     paddingVertical: vScale(8),
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: '#fcd34d',
+    borderColor: '#402105',
   },
-  adminBannerText: { color: '#92400e', fontWeight: '700', fontSize: FONT.sm },
+  adminBannerText: { color: '#402105', fontWeight: '700', fontSize: FONT.sm },
   list: { paddingHorizontal: HP, paddingTop: SPACE.sm },
   card: {
     backgroundColor: '#fff',
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   cardInfo: { flex: 1, marginHorizontal: SPACE.sm },
   cardName: { fontSize: FONT.base, fontWeight: '700', color: '#111827' },
   cardCategory: { fontSize: FONT.xs, color: '#6b7280', marginTop: 2 },
-  cardPrice: { fontSize: FONT.base, fontWeight: '800', color: '#4f46e5', marginTop: 2 },
+  cardPrice: { fontSize: FONT.base, fontWeight: '800', color: '#402105', marginTop: 2 },
   cardActions: { flexDirection: 'row', gap: SPACE.xs },
   editBtn: { padding: SPACE.sm, backgroundColor: '#eff6ff', borderRadius: RADIUS.sm },
   deleteBtn: { padding: SPACE.sm, backgroundColor: '#fef2f2', borderRadius: RADIUS.sm },
@@ -243,12 +243,12 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: HP,
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#402105',
     borderRadius: RADIUS.full,
     paddingHorizontal: SPACE.lg,
     paddingVertical: vScale(12),
     elevation: 8,
-    shadowColor: '#4f46e5',
+    shadowColor: '#402105',
     shadowOpacity: 0.4,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -302,11 +302,11 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
     backgroundColor: '#e5e7eb',
   },
-  catChipActive: { backgroundColor: '#4f46e5' },
+  catChipActive: { backgroundColor: '#402105' },
   catChipText: { color: '#374151', fontWeight: '600', fontSize: FONT.sm },
   catChipTextActive: { color: '#fff' },
   saveBtn: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#402105',
     borderRadius: RADIUS.md,
     paddingVertical: vScale(14),
     alignItems: 'center',

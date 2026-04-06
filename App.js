@@ -16,13 +16,13 @@ import { FONT, vScale } from './src/utils/responsive';
 const Tab = createBottomTabNavigator();
 
 const ICONS = {
-  'Catálogo': '🛍️',
-  'Mapa': '📍',
-  'Admin': '⚙️',
-  'Perfil': '👤',
+  'Catálogo': '≡',
+  'Mapa': '⌖',
+  'Admin': '⚙',
+  'Perfil': '⌗',
 };
 
-const STORAGE_VERSION = '2';
+const STORAGE_VERSION = '3';
 
 function toBoolean(value) {
   if (typeof value === 'boolean') return value;
@@ -43,10 +43,10 @@ function AppTabs({ user, onLogout }) {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => (
           <Text style={{ fontSize: FONT.xl, opacity: focused ? 1 : 0.55 }}>
-            {ICONS[route.name] || '❓'}
+            {ICONS[route.name] || ''}
           </Text>
         ),
-        tabBarActiveTintColor: '#4f46e5',
+        tabBarActiveTintColor: '#000000',
         tabBarInactiveTintColor: '#9ca3af',
         tabBarLabelStyle: {
           fontSize: FONT.xs,
@@ -66,16 +66,21 @@ function AppTabs({ user, onLogout }) {
           shadowRadius: 8,
           shadowOffset: { width: 0, height: -2 },
         },
-        headerStyle: { backgroundColor: '#4f46e5' },
+        headerStyle: { backgroundColor: '#402105' },
         headerTintColor: '#ffffff',
         headerTitleStyle: { fontWeight: '700', fontSize: FONT.lg },
       })}
     >
       <Tab.Screen name="Catálogo" component={CatalogScreen} />
       <Tab.Screen name="Mapa" component={MapScreen} />
-      {user.isAdmin === true ? (
-        <Tab.Screen name="Admin" component={AdminScreen} />
-      ) : null}
+      <Tab.Screen
+        name="Admin"
+        component={AdminScreen}
+        options={{
+          tabBarItemStyle: { display: user.isAdmin === true ? 'flex' : 'none' },
+          tabBarButton: user.isAdmin === true ? undefined : () => null,
+        }}
+      />
       <Tab.Screen name="Perfil">
         {() => <ProfileScreen user={user} onLogout={onLogout} />}
       </Tab.Screen>
@@ -112,8 +117,8 @@ function Main() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e' }}>
-        <ActivityIndicator size="large" color="#4f46e5" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a0d02' }}>
+        <ActivityIndicator size="large" color="#402105" />
       </View>
     );
   }

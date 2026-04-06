@@ -28,7 +28,7 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         initialRegion={STORE_LOCATION}
       >
-        <Marker coordinate={STORE_LOCATION} title="Nossa Loja" pinColor="#4f46e5" />
+        <Marker coordinate={STORE_LOCATION} title="Nossa Loja" pinColor="#402105" />
       </MapView>
 
       <TouchableOpacity style={styles.gmapsButton} onPress={openInMaps}>
@@ -47,18 +47,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#e5e7eb',
   },
-  storeName: { fontWeight: '700', fontSize: FONT.lg, color: '#111827' },
+  storeName: { fontWeight: '700', fontSize: FONT.lg, color: '#402105' },
   address: { color: '#6b7280', fontSize: FONT.base, marginTop: 2 },
   map: { flex: 1 },
   gmapsButton: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#402105',
     paddingVertical: vScale(14),
     marginHorizontal: HP,
     marginVertical: SPACE.md,
     borderRadius: RADIUS.md,
     alignItems: 'center',
     elevation: 4,
-    shadowColor: '#4f46e5',
+    shadowColor: '#402105',
     shadowOpacity: 0.3,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },

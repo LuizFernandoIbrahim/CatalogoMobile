@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {
@@ -122,10 +123,14 @@ export default function AuthScreen({ onLogin }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.logo}>🛍️</Text>
-          <Text style={styles.title}>CatalogApp</Text>
+          <Image
+            source={require('../../assets/logo-inicial.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Oficina de Marias</Text>
           <Text style={styles.subtitle}>
-            {mode === 'login' ? 'Bem-vindo de volta!' : 'Crie sua conta'}
+            {mode === 'login' ? 'Bem-vindo à nossa loja!' : 'Crie sua conta'}
           </Text>
         </View>
 
@@ -167,7 +172,7 @@ export default function AuthScreen({ onLogin }) {
 
           {mode === 'login' && biometricsAvailable && (
             <TouchableOpacity style={styles.biometricButton} onPress={handleBiometricLogin}>
-              <Text style={styles.biometricText}>🔒 Entrar com biometria</Text>
+              <Text style={styles.biometricText}>Entrar com biometria</Text>
             </TouchableOpacity>
           )}
 
@@ -186,7 +191,7 @@ export default function AuthScreen({ onLogin }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#1a1a2e' },
+  container: { flex: 1, backgroundColor: '#ffd3a2' },
   scroll: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -194,9 +199,12 @@ const styles = StyleSheet.create({
     paddingVertical: SPACE.xl,
   },
   header: { alignItems: 'center', marginBottom: SPACE.xl },
-  logo: { fontSize: mScale(48) },
-  title: { fontSize: FONT.hero, fontWeight: '800', color: '#fff', marginTop: SPACE.sm },
-  subtitle: { fontSize: FONT.md, color: '#a0a0c0', marginTop: SPACE.xs },
+  logo: {
+    width: mScale(210),
+    height: mScale(210),
+  },
+  title: { fontSize: FONT.hero, fontWeight: '800', color: '#402105', marginTop: SPACE.sm },
+  subtitle: { fontSize: FONT.md, color: '#402105', marginTop: SPACE.xs },
   card: {
     backgroundColor: '#fff',
     borderRadius: RADIUS.xl,
@@ -218,7 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   button: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#402105',
     borderRadius: RADIUS.md,
     paddingVertical: vScale(14),
     alignItems: 'center',
@@ -227,14 +235,14 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: '#fff', fontSize: FONT.md, fontWeight: '700' },
   biometricButton: {
-    borderWidth: 1,
-    borderColor: '#4f46e5',
+    borderWidth: 2,
+    borderColor: '#402105',
     borderRadius: RADIUS.md,
     paddingVertical: vScale(12),
     alignItems: 'center',
     marginBottom: SPACE.md,
   },
-  biometricText: { color: '#4f46e5', fontSize: FONT.base, fontWeight: '600' },
+  biometricText: { color: '#402105', fontSize: FONT.base, fontWeight: '600' },
   switchBtn: { paddingVertical: SPACE.sm, alignItems: 'center' },
-  switchText: { color: '#6b7280', fontSize: FONT.sm },
+  switchText: { color: '#402105', fontSize: FONT.sm },
 });
