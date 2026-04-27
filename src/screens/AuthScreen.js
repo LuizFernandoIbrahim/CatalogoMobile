@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -41,6 +41,10 @@ export default function AuthScreen({ onLogin }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [biometricsAvailable, setBiometricsAvailable] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const scrollRef = useRef(null);
+  const passwordRef = useRef(null);
 
   useEffect(() => { checkBiometrics(); }, []);
 
@@ -112,12 +116,22 @@ export default function AuthScreen({ onLogin }) {
     }
   }
 
+  function handlePasswordFocus() {
+    setTimeout(() => {
+      passwordRef.current?.measureInWindow((x, y) => {
+        scrollRef.current?.scrollTo({ y: y - 120, animated: true });
+      });
+    }, 300);
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 24}
     >
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -152,13 +166,24 @@ export default function AuthScreen({ onLogin }) {
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+
+          <View ref={passwordRef} style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Senha"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              onFocus={handlePasswordFocus}
+            />
+            <TouchableOpacity
+              style={styles.eyeButton}
+              onPress={() => setShowPassword(prev => !prev)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.eyeIcon}>{showPassword ? '👁️✅' : '👁️❌'}</Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={[styles.button, loading && { opacity: 0.6 }]}
@@ -224,6 +249,29 @@ const styles = StyleSheet.create({
     marginBottom: SPACE.sm,
     fontSize: FONT.md,
     backgroundColor: '#f9f9f9',
+  },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: RADIUS.md,
+    backgroundColor: '#f9f9f9',
+    marginBottom: SPACE.sm,
+    paddingHorizontal: SPACE.md,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: vScale(12),
+    fontSize: FONT.md,
+  },
+  eyeButton: {
+    paddingLeft: SPACE.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eyeIcon: {
+    fontSize: mScale(18),
   },
   button: {
     backgroundColor: '#402105',
