@@ -14,8 +14,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getProducts } from '../utils/storage';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
-const CATEGORIES = ['Todos', 'Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
-const THUMB_SIZE = scale(80); // Ajustado para caber com padding
+export const PRODUCT_CATEGORIES = ['Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
+const FILTER_CATEGORIES = ['Todos', ...PRODUCT_CATEGORIES];
+
+const THUMB_SIZE = scale(80);
 
 export default function CatalogScreen() {
   const [products, setProducts] = useState([]);
@@ -51,7 +53,6 @@ export default function CatalogScreen() {
 
   const renderProduct = ({ item }) => (
     <View style={styles.card}>
-      {/* Container da Imagem com Padding para evitar o efeito "cortado" */}
       <View style={styles.imageWrapper}>
         {item.photo ? (
           <Image source={{ uri: item.photo }} style={styles.image} resizeMode="cover" />
@@ -72,7 +73,7 @@ export default function CatalogScreen() {
             <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
           )}
         </View>
-        
+
         <Text style={styles.price}>
           R$ {Number(item.price || 0).toFixed(2).replace('.', ',')}
         </Text>
@@ -92,7 +93,7 @@ export default function CatalogScreen() {
 
       <View style={{ height: vScale(48) }}>
         <FlatList
-          data={CATEGORIES}
+          data={FILTER_CATEGORIES}  
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(c) => `cat-${c}`}
@@ -158,14 +159,12 @@ const styles = StyleSheet.create({
   categoryChipText: { color: '#374151', fontWeight: '600', fontSize: FONT.sm },
   categoryChipTextActive: { color: '#fff' },
   list: { paddingHorizontal: HP, paddingTop: SPACE.sm },
-  
-  // Estilização do Card Corrigida
   card: {
     backgroundColor: '#fff',
     borderRadius: RADIUS.lg,
     marginBottom: SPACE.sm,
     flexDirection: 'row',
-    padding: SPACE.sm, // Padding interno para a imagem não encostar na borda
+    padding: SPACE.sm,
     elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.06,
@@ -179,10 +178,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#f3f4f6',
   },
-  image: { 
-    width: '100%', 
-    height: '100%' 
-  },
+  image: { width: '100%', height: '100%' },
   imagePlaceholder: {
     width: '100%',
     height: '100%',
@@ -190,23 +186,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  placeholderIcon: { 
-    fontSize: mScale(24), 
-    color: '#9ca3af',
-    opacity: 0.6 
-  },
-  info: { 
-    flex: 1, 
-    marginLeft: SPACE.md, // Espaçamento entre imagem e texto
-    justifyContent: 'space-between' 
-  },
-  productName: { 
-    fontSize: FONT.md, 
-    fontWeight: '700', 
-    color: '#111827' 
-  },
+  placeholderIcon: { fontSize: mScale(24), color: '#9ca3af', opacity: 0.6 },
+  info: { flex: 1, marginLeft: SPACE.md, justifyContent: 'space-between' },
+  productName: { fontSize: FONT.md, fontWeight: '700', color: '#111827' },
   categoryBadge: {
-    backgroundColor: '#FEF3C7', // Tom de bege Admin
+    backgroundColor: '#FEF3C7',
     paddingHorizontal: SPACE.sm,
     paddingVertical: 2,
     borderRadius: RADIUS.sm,
@@ -215,21 +199,12 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: scale(10),
-    color: '#92400E', // Marrom Admin
+    color: '#92400E',
     fontWeight: '700',
     textTransform: 'uppercase',
   },
-  description: { 
-    fontSize: FONT.xs, 
-    color: '#9ca3af', 
-    marginTop: 4 
-  },
-  price: { 
-    fontSize: FONT.lg, 
-    fontWeight: '800', 
-    color: '#402105', 
-    marginTop: 4 
-  },
+  description: { fontSize: FONT.xs, color: '#9ca3af', marginTop: 4 },
+  price: { fontSize: FONT.lg, fontWeight: '800', color: '#402105', marginTop: 4 },
   empty: { alignItems: 'center', paddingTop: vScale(60) },
   emptyText: { color: '#9ca3af', fontSize: FONT.md },
 });

@@ -17,7 +17,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { getProducts, saveProduct, updateProduct, deleteProduct } from '../utils/storage';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
-const CATEGORIES = ['Todos', 'Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
+const CATEGORIES = ['Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
 const EMPTY_FORM = { name: '', price: '', category: 'Todos', description: '', photo: null };
 const THUMB = scale(56);
 
