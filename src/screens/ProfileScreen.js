@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { logoutUser, updateUserPhoto, setBiometricsEnabled, isBiometricsEnabled } from '../utils/storage';
+import { logoutUser, updateUserPhoto, setBiometricsEnabled, isBiometricsEnabled } from '../database/clientes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getProducts } from '../utils/storage';
+import { getProducts, sincronizarComFirebase } from '../database/catalogo';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
 export const PRODUCT_CATEGORIES = ['Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
@@ -27,21 +27,33 @@ export default function CatalogScreen({ navigation }) {
   const insets = useSafeAreaInsets();
 
   useFocusEffect(
-    useCallback(() => { loadProducts(); }, [])
+    useCallback(() => {
+      inicializarDados();
+    }, [])
   );
 
-  async function loadProducts() {
+  async function inicializarDados() {
     try {
-      const data = await getProducts();
-      setProducts(data || []);
+      // 1. Carrega IMEDIATAMENTE o cache local do SQLite (App abre sem delay)
+      const localData = await getProducts();
+      setProducts(localData || []);
+
+      // 2. Busca atualizações no Firebase em segundo plano
+      await sincronizarComFirebase();
+
+      // 3. Atualiza a tela com novos dados caso a nuvem tenha trazido novidades
+      const updatedData = await getProducts();
+      setProducts(updatedData || []);
     } catch (e) {
-      console.error('Erro ao carregar produtos:', e);
+      console.error('Erro na inicialização do catálogo:', e);
     }
   }
 
   async function onRefresh() {
     setRefreshing(true);
-    await loadProducts();
+    await sincronizarComFirebase();
+    const data = await getProducts();
+    setProducts(data || []);
     setRefreshing(false);
   }
 

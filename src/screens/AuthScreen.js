@@ -19,7 +19,7 @@ import {
   setBiometricsEnabled,
   getCurrentUser,
   getLastUser,
-} from '../utils/storage';
+} from '../database/clientes';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale } from '../utils/responsive';
 
 function toBoolean(value) {

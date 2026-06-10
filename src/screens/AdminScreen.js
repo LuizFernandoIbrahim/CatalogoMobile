@@ -14,7 +14,7 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { getProducts, saveProduct, updateProduct, deleteProduct } from '../utils/storage';
+import { getProducts, saveProduct, updateProduct, deleteProduct } from '../database/catalogo';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
 const CATEGORIES = ['Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
