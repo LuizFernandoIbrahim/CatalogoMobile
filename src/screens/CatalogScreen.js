@@ -19,7 +19,7 @@ const FILTER_CATEGORIES = ['Todos', ...PRODUCT_CATEGORIES];
 
 const THUMB_SIZE = scale(80);
 
-export default function CatalogScreen() {
+export default function CatalogScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
@@ -52,7 +52,11 @@ export default function CatalogScreen() {
   });
 
   const renderProduct = ({ item }) => (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate('ProductDetail', { product: item })}
+      activeOpacity={0.75}
+    >
       <View style={styles.imageWrapper}>
         {item.photo ? (
           <Image source={{ uri: item.photo }} style={styles.image} resizeMode="cover" />
@@ -78,7 +82,9 @@ export default function CatalogScreen() {
           R$ {Number(item.price || 0).toFixed(2).replace('.', ',')}
         </Text>
       </View>
-    </View>
+
+      <Text style={styles.chevron}>›</Text>
+    </TouchableOpacity>
   );
 
   return (
@@ -93,7 +99,7 @@ export default function CatalogScreen() {
 
       <View style={{ height: vScale(48) }}>
         <FlatList
-          data={FILTER_CATEGORIES}  
+          data={FILTER_CATEGORIES}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(c) => `cat-${c}`}
@@ -164,6 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.lg,
     marginBottom: SPACE.sm,
     flexDirection: 'row',
+    alignItems: 'center',
     padding: SPACE.sm,
     elevation: 2,
     shadowColor: '#000',
@@ -205,6 +212,12 @@ const styles = StyleSheet.create({
   },
   description: { fontSize: FONT.xs, color: '#9ca3af', marginTop: 4 },
   price: { fontSize: FONT.lg, fontWeight: '800', color: '#402105', marginTop: 4 },
+  chevron: {
+    fontSize: scale(22),
+    color: '#d1d5db',
+    marginLeft: SPACE.xs,
+    fontWeight: '300',
+  },
   empty: { alignItems: 'center', paddingTop: vScale(60) },
   emptyText: { color: '#9ca3af', fontSize: FONT.md },
 });

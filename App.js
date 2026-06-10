@@ -1,43 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, ActivityIndicator, View, Platform } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Text, ActivityIndicator, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-
+ 
 import AuthScreen from './src/screens/AuthScreen';
 import CatalogScreen from './src/screens/CatalogScreen';
+import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import MapScreen from './src/screens/MapScreen';
 import AdminScreen from './src/screens/AdminScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import { getCurrentUser } from './src/utils/storage';
 import { FONT, vScale } from './src/utils/responsive';
-
+ 
 const Tab = createBottomTabNavigator();
-
+const CatalogStack = createStackNavigator();
+ 
 const ICONS = {
   'Catálogo': '≡',
   'Mapa': '⌖',
   'Admin': '⚙',
   'Perfil': '⌗',
 };
-
+ 
 const STORAGE_VERSION = '3';
-
+ 
 function toBoolean(value) {
   if (typeof value === 'boolean') return value;
   if (typeof value === 'string') return value.trim().toLowerCase() === 'true';
   if (typeof value === 'number') return value === 1;
   return false;
 }
-
-// Tab navigator separado para poder usar o hook useSafeAreaInsets
+ 
+function CatalogStackScreen() {
+  return (
+    <CatalogStack.Navigator screenOptions={{ headerShown: false }}>
+      <CatalogStack.Screen name="CatalogList" component={CatalogScreen} />
+      <CatalogStack.Screen name="ProductDetail" component={ProductDetailScreen} />
+    </CatalogStack.Navigator>
+  );
+}
+// ─────────────────────────────────────────────────────────────────────────────
+ 
 function AppTabs({ user, onLogout }) {
   const insets = useSafeAreaInsets();
-
-  // Altura base da tab bar + espaço seguro do sistema (navigation bar Android / home indicator iOS)
   const TAB_HEIGHT = vScale(56) + insets.bottom;
-
+ 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -71,7 +81,12 @@ function AppTabs({ user, onLogout }) {
         headerTitleStyle: { fontWeight: '700', fontSize: FONT.lg },
       })}
     >
-      <Tab.Screen name="Catálogo" component={CatalogScreen} />
+
+      <Tab.Screen
+        name="Catálogo"
+        component={CatalogStackScreen}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen name="Mapa" component={MapScreen} />
       <Tab.Screen
         name="Admin"
@@ -87,11 +102,11 @@ function AppTabs({ user, onLogout }) {
     </Tab.Navigator>
   );
 }
-
+ 
 function Main() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     async function init() {
       try {
@@ -114,7 +129,7 @@ function Main() {
     }
     init();
   }, []);
-
+ 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a0d02' }}>
@@ -122,7 +137,7 @@ function Main() {
       </View>
     );
   }
-
+ 
   if (!user) {
     return (
       <AuthScreen
@@ -132,14 +147,14 @@ function Main() {
       />
     );
   }
-
+ 
   return (
     <NavigationContainer>
       <AppTabs user={user} onLogout={() => setUser(null)} />
     </NavigationContainer>
   );
 }
-
+ 
 export default function App() {
   return (
     <SafeAreaProvider>
