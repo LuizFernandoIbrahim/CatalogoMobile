@@ -1,21 +1,19 @@
 import { getDatabase } from './banco';
 import NetInfo from '@react-native-community/netinfo';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { dbFirestore } from './firebase'; // Certifique-se de criar o firebase.js nesta pasta
+import { dbFirestore } from './firebase';
 
-// Função auxiliar para garantir que a coluna updatedAt existe (evita quebrar se a tabela já existia)
 async function atualizarEstruturaTabela(db) {
   try {
     await db.runAsync('ALTER TABLE products ADD COLUMN updatedAt INTEGER DEFAULT 0');
   } catch {
-    // Se a coluna já existir, o SQLite joga um erro e nós apenas ignoramos
   }
 }
 
 export async function getProducts() {
   try {
     const db = await getDatabase();
-    await atualizarEstruturaTabela(db); // Garante a estrutura correta
+    await atualizarEstruturaTabela(db);
     return await db.getAllAsync(
       'SELECT * FROM products ORDER BY name ASC'
     );
@@ -24,7 +22,6 @@ export async function getProducts() {
   }
 }
 
-// FUNÇÃO DE SINCRONIZAÇÃO: Puxa dados do Firebase e joga no SQLite
 export async function sincronizarComFirebase() {
   try {
     const db = await getDatabase();
@@ -38,14 +35,12 @@ export async function sincronizarComFirebase() {
       return;
     }
 
-    // Descobre o timestamp do produto mais recente armazenado localmente
     const resultado = await db.getFirstAsync(
       'SELECT MAX(updatedAt) as max_date FROM products'
     );
     const ultimaAtualizacaoLocal = resultado?.max_date || 0;
     console.log("=== ULTIMA ATUALIZACAO LOCAL (SQLite) ===", ultimaAtualizacaoLocal);
 
-    // Ajustado para "produtos" para bater exatamente com o seu print do painel do Firestore
     const produtosRef = collection(dbFirestore, "produtos"); 
     const q = query(produtosRef, where("updatedAt", ">", ultimaAtualizacaoLocal));
     
@@ -59,7 +54,6 @@ export async function sincronizarComFirebase() {
         const dadosNuvem = doc.data();
         console.log("=== DADO QUE VEIO DA NUVEM ===", dadosNuvem);
         
-        // INSERT OR REPLACE atualiza o produto se o ID já existir, ou cria se for novo
         await db.runAsync(
           `INSERT OR REPLACE INTO products (id, name, description, price, category, photo, updatedAt)
            VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -90,13 +84,13 @@ export async function saveProduct(product) {
       `INSERT INTO products (id, name, description, price, category, photo, updatedAt)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
-        product.id || Date.now().toString(), // Aceita o ID se já vem da nuvem
+        product.id || Date.now().toString(),
         product.name,
         product.description || null,
         Number(product.price) || 0,
         product.category || null,
         product.photo || null,
-        Date.now() // Define o timestamp atual
+        Date.now()
       ]
     );
   } catch (e) {

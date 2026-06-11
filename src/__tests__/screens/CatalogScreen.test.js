@@ -2,8 +2,6 @@ import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { render } from '@testing-library/react-native';
 
-// Mock temporário da tela caso precise rodar isolado
-// Se a sua CatalogScreen real usar componentes complexos, o render() vai ler direto dela.
 function CatalogScreenMock() {
   return (
     <View>

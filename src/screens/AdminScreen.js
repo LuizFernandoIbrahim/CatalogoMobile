@@ -110,7 +110,6 @@ export default function AdminScreen() {
     );
   }
 
-  // FAB fica acima da navigation bar
   const fabBottom = SPACE.lg + insets.bottom;
 
   return (
