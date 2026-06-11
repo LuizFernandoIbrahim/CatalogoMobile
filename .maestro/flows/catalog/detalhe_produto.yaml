@@ -1,0 +1,16 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- assertVisible: "Tapete de Crochê Redondo"
+- tapOn: "Tapete de Crochê Redondo"
+
+# Verifica tela de detalhe
+- assertVisible: "Sobre o produto"
+- assertVisible: "Categoria"
+- assertVisible: "Preço"
+
+# Volta para o catálogo (usando id ou o botão de voltar nativo se preferir)
+- tapOn:
+    id: "back-button"
+- assertVisible: "Catálogo"

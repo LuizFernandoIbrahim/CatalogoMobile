@@ -1,0 +1,15 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- assertVisible: "Buscar produto..."
+
+- tapOn: "Buscar produto..."
+- inputText: "Tapete"
+
+- assertVisible: "Tapete de Crochê Redondo"
+- assertNotVisible: "Almofada Bordada"
+
+# Limpa busca
+- clearText
+- assertVisible: "Almofada Bordada"

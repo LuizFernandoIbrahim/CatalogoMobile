@@ -1,0 +1,16 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- assertVisible: "Catálogo"
+- assertVisible: "Buscar produto..."
+
+# Verifica que produtos aparecem
+- assertVisible: "Tapete de Crochê Redondo"
+
+# Verifica filtros de categoria
+- tapOn: "Crochê"
+- assertVisible: "Tapete de Crochê Redondo"
+
+- tapOn: "Todos"
+- assertVisible: "Almofada Bordada"
