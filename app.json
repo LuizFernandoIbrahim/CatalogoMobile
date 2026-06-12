@@ -42,10 +42,14 @@
           },
           "ios": {
             "newArchEnabled": false
-            
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d71aee68-6377-45ec-abb8-5407aa91c88f"
+      }
+    }
   }
 }

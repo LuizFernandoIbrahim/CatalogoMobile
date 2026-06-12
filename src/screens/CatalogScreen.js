@@ -34,14 +34,12 @@ export default function CatalogScreen({ navigation }) {
 
   async function inicializarDados() {
     try {
-      // 1. Carrega IMEDIATAMENTE o cache local do SQLite (App abre sem delay)
+
       const localData = await getProducts();
       setProducts(localData || []);
 
-      // 2. Busca atualizações no Firebase em segundo plano
       await sincronizarComFirebase();
 
-      // 3. Atualiza a tela com novos dados caso a nuvem tenha trazido novidades
       const updatedData = await getProducts();
       setProducts(updatedData || []);
     } catch (e) {
@@ -101,6 +99,10 @@ export default function CatalogScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={[styles.header, { paddingTop: insets.top + vScale(14) }]}>
+        <Text style={styles.headerText}>Catálogo</Text>
+      </View>
+
       <TextInput
         style={styles.search}
         placeholder="Buscar produto..."
@@ -149,6 +151,17 @@ export default function CatalogScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f3f4f6' },
+  header: {
+    backgroundColor: '#402105',
+    paddingBottom: vScale(14),
+    paddingHorizontal: HP,
+    alignItems: 'flex-start',
+  },
+  headerText: {
+    color: '#ffffff',
+    fontWeight: '800',
+    fontSize: FONT.lg,
+  },
   search: {
     marginHorizontal: HP,
     marginTop: SPACE.md,

@@ -152,12 +152,14 @@ export default function AdminScreen() {
             <TextInput
               style={styles.input}
               placeholder="Nome do produto *"
+              placeholderTextColor="#9ca3af"
               value={form.name}
               onChangeText={(v) => setForm({ ...form, name: v })}
             />
             <TextInput
               style={styles.input}
               placeholder="Preço (ex: 49.90) *"
+              placeholderTextColor="#9ca3af"
               value={form.price}
               onChangeText={(v) => setForm({ ...form, price: v })}
               keyboardType="decimal-pad"
@@ -165,6 +167,7 @@ export default function AdminScreen() {
             <TextInput
               style={[styles.input, styles.inputMultiline]}
               placeholder="Descrição"
+              placeholderTextColor="#9ca3af"
               value={form.description}
               onChangeText={(v) => setForm({ ...form, description: v })}
               multiline
@@ -291,6 +294,7 @@ const styles = StyleSheet.create({
     fontSize: FONT.base,
     marginBottom: SPACE.sm,
     backgroundColor: '#f9f9f9',
+    color: '#111827',
   },
   inputMultiline: { height: vScale(72), textAlignVertical: 'top' },
   label: { fontWeight: '600', color: '#374151', marginBottom: SPACE.sm, fontSize: FONT.base },

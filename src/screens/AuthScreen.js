@@ -153,6 +153,7 @@ export default function AuthScreen({ onLogin }) {
             <TextInput
               style={styles.input}
               placeholder="Nome completo"
+              placeholderTextColor="#9ca3af"
               value={name}
               onChangeText={setName}
               autoCapitalize="words"
@@ -161,6 +162,7 @@ export default function AuthScreen({ onLogin }) {
           <TextInput
             style={styles.input}
             placeholder="E-mail"
+            placeholderTextColor="#9ca3af"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -171,6 +173,7 @@ export default function AuthScreen({ onLogin }) {
             <TextInput
               style={styles.passwordInput}
               placeholder="Senha"
+              placeholderTextColor="#9ca3af"
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
@@ -249,6 +252,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACE.sm,
     fontSize: FONT.md,
     backgroundColor: '#f9f9f9',
+    color: '#111827',
   },
   passwordWrapper: {
     flexDirection: 'row',
@@ -264,6 +268,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: vScale(12),
     fontSize: FONT.md,
+    color: '#111827',
   },
   eyeButton: {
     paddingLeft: SPACE.sm,

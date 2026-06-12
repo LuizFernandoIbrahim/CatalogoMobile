@@ -8,7 +8,7 @@ const PRODUTOS_INICIAIS = [
     name: 'Tapete de Crochê Redondo',
     description: 'Tapete artesanal feito à mão com fio 100% algodão.',
     price: 89.90,
-    category: 'Crochê',
+    category: 'Decoração',
     photo: null,
   },
   {
@@ -16,7 +16,7 @@ const PRODUTOS_INICIAIS = [
     name: 'Cesto Organizador',
     description: 'Cesto trançado em fibra natural, ideal para organizar o lar.',
     price: 65.00,
-    category: 'Cestaria',
+    category: 'Uso Pessoal',
     photo: null,
   },
   {
@@ -24,7 +24,7 @@ const PRODUTOS_INICIAIS = [
     name: 'Vaso de Macramê',
     description: 'Vaso suspenso em macramê, perfeito para plantas pequenas.',
     price: 45.00,
-    category: 'Macramê',
+    category: 'Outros',
     photo: null,
   },
   {
@@ -32,7 +32,7 @@ const PRODUTOS_INICIAIS = [
     name: 'Almofada Bordada',
     description: 'Almofada com bordado floral feito à mão, enchimento incluso.',
     price: 120.00,
-    category: 'Bordado',
+    category: 'Decoração',
     photo: null,
   },
   {

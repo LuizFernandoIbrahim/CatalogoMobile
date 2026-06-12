@@ -49,7 +49,7 @@ function AppTabs({ user, onLogout }) {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => (
-          <Text style={{ fontSize: FONT.xl, opacity: focused ? 1 : 0.55 }}>
+          <Text style={{ fontSize: FONT.xl, lineHeight: FONT.xl * 1.2, opacity: focused ? 1 : 0.55 }}>
             {ICONS[route.name] || ''}
           </Text>
         ),

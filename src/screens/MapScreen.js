@@ -1,35 +1,56 @@
 import React from 'react';
 import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { WebView } from 'react-native-webview';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONT, RADIUS, SPACE, HP, vScale } from '../utils/responsive';
 
-const STORE_LOCATION = {
-  latitude: -22.4036,
-  longitude: -43.6636,
-  latitudeDelta: 0.005,
-  longitudeDelta: 0.005,
-};
+const STORE_LAT = -22.4036;
+const STORE_LNG = -43.6636;
+
+const MAP_HTML = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 100vw; height: 100vh; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <iframe
+    src="https://maps.google.com/maps?q=${STORE_LAT},${STORE_LNG}&z=15&output=embed"
+    allowfullscreen
+  ></iframe>
+</body>
+</html>
+`;
 
 export default function MapScreen() {
+  const insets = useSafeAreaInsets();
+
   function openInMaps() {
-    const url = `https://www.google.com/maps/search/?api=1&query=${STORE_LOCATION.latitude},${STORE_LOCATION.longitude}`;
+    const url = `https://www.google.com/maps/search/?api=1&query=${STORE_LAT},${STORE_LNG}`;
     Linking.openURL(url);
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={styles.infoCard}>
         <Text style={styles.storeName}>Nossa Loja</Text>
         <Text style={styles.address}>Vassouras / RJ</Text>
       </View>
 
-      <MapView
+      <WebView
         style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={STORE_LOCATION}
-      >
-        <Marker coordinate={STORE_LOCATION} title="Nossa Loja" pinColor="#402105" />
-      </MapView>
+        source={{ html: MAP_HTML }}
+        originWhitelist={['*']}
+        javaScriptEnabled
+        domStorageEnabled
+        startInLoadingState
+        scalesPageToFit={false}
+      />
 
       <TouchableOpacity style={styles.gmapsButton} onPress={openInMaps}>
         <Text style={styles.gmapsText}>Abrir no Google Maps</Text>
