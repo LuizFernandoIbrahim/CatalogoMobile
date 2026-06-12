@@ -1,0 +1,60 @@
+appId: com.oficina.catalogo
+---
+# Pré-requisito: usuário logado já deve ser admin (rode 06_login_admin.yaml antes,
+# ou ajuste este flow para fazer o login primeiro).
+- launchApp
+
+- runFlow:
+    when:
+      visible: "Bem-vindo à nossa loja!"
+    commands:
+      - tapOn: "E-mail"
+      - inputText: "admin@loja.com"
+      - tapOn: "Senha"
+      - inputText: "1234"
+      - tapOn: "Entrar"
+
+- assertVisible: "Catálogo"
+- tapOn: "Admin"
+- assertVisible: "Modo Administrador"
+
+### CRIAR PRODUTO ###
+- tapOn: ".*Novo Produto.*"
+- assertVisible: "Novo Produto"
+
+- tapOn: "Nome do produto *"
+- inputText: "Produto Teste Maestro"
+
+- tapOn: "Preço (ex: 49.90) *"
+- inputText: "25.50"
+
+- tapOn: "Descrição"
+- inputText: "Produto criado via teste automatizado"
+
+# Selecionar categoria
+- tapOn: "Cozinha"
+
+- tapOn: "Salvar"
+
+# Produto deve aparecer na lista do Admin
+- assertVisible: "Produto Teste Maestro"
+
+### EDITAR PRODUTO ###
+# Tocar no ícone de editar (lápis) ao lado do produto criado
+- tapOn: "✎"
+- assertVisible: "Editar Produto"
+
+- tapOn: "Nome do produto *"
+- eraseText
+- inputText: "Produto Teste Maestro Editado"
+- tapOn: "Salvar"
+
+### EXCLUIR PRODUTO ###
+- assertVisible: "Produto Teste Maestro Editado"
+- tapOn: "🗑"
+- assertVisible: "Deseja excluir este produto?"
+- tapOn: "Excluir"
+
+### VOLTAR PARA O CATÁLOGO ###
+- tapOn: "Catálogo"
+- assertVisible: "Buscar produto..."

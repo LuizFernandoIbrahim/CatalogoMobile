@@ -1,0 +1,33 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- runFlow:
+    when:
+      visible: "Bem-vindo à nossa loja!"
+    commands:
+      - tapOn: "E-mail"
+      - inputText: "admin@loja.com"
+      - tapOn: "Senha"
+      - inputText: "1234"
+      - tapOn: "Entrar"
+
+      # Escolhendo "não" na biometria
+      - runFlow:
+          when:
+            visible: "Ativar Biometria"
+          commands:
+            - tapOn: "Não"
+
+# catalogscreen
+- assertVisible: "Catálogo"
+- assertVisible: "Buscar produto..."
+
+# barra inferior
+- assertVisible: "Mapa"
+- assertVisible: "Admin"
+- assertVisible: "Perfil"
+
+# modo adm
+- tapOn: "Admin"
+- assertVisible: "Modo Administrador"

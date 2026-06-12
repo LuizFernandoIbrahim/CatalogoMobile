@@ -1,0 +1,30 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+# Caso o app já esteja logado (sessão persistida do flow anterior),
+# pula direto para o catálogo. Caso contrário, faz login normalmente.
+- runFlow:
+    when:
+      visible: "Bem-vindo à nossa loja!"
+    commands:
+      - tapOn: "E-mail"
+      - inputText: "maestro@teste.com"
+      - tapOn: "Senha"
+      - inputText: "1234"
+      - tapOn: "Entrar"
+
+      # Escolhendo "não" na biometria
+      - runFlow:
+          when:
+            visible: "Ativar Biometria"
+          commands:
+            - tapOn: "Não"
+
+# catalogscreen
+- assertVisible: "Catálogo"
+- assertVisible: "Buscar produto..."
+
+# barra inferior
+- assertVisible: "Mapa"
+- assertVisible: "Perfil"

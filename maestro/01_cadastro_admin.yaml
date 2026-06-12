@@ -1,0 +1,29 @@
+appId: com.oficina.catalogo
+---
+- launchApp:
+    clearState: true
+
+# primeiro contato com o app
+- assertVisible: "Bem-vindo à nossa loja!"
+
+# tela de cadastro
+- tapOn: "Não tem conta? Cadastre-se"
+- assertVisible: "Crie sua conta"
+
+# criação da conta
+- tapOn: "Nome completo"
+- inputText: "Usuario Admin"
+- tapOn: "E-mail"
+- inputText: "admin@loja.com"
+- tapOn: "Senha"
+- inputText: "1234"
+
+- tapOn: "Cadastrar"
+
+# confirmação de criação
+- assertVisible: "Cadastro realizado!"
+- tapOn: "OK"
+
+# final do fluxo
+- assertVisible: "Não tem conta? Cadastre-se"
+- assertVisible: "Bem-vindo à nossa loja!"

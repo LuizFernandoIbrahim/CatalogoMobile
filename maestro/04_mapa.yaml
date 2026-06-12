@@ -1,0 +1,17 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- assertVisible: "Catálogo"
+
+# Abrir o Mapa - este era o bug que crashava o app
+- tapOn: "Mapa"
+
+# App não deve fechar; tela do mapa deve renderizar
+- assertVisible: "Nossa Loja"
+- assertVisible: "Vassouras / RJ"
+- assertVisible: "Abrir no Google Maps"
+
+# Confirma que o app continua respondendo (não crashou)
+- tapOn: "Catálogo"
+- assertVisible: "Buscar produto..."

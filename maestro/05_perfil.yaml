@@ -1,0 +1,23 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+- assertVisible: "Catálogo"
+
+# Ir para a aba Perfil
+- tapOn: "Perfil"
+
+- assertVisible: "Configurações"
+- assertVisible: "Login por biometria"
+- assertVisible: "Usar impressão digital / Face ID"
+- assertVisible: "Sair da conta"
+
+# Alternar biometria (toggle)
+- tapOn: "Login por biometria"
+
+# Logout
+- tapOn: "Sair da conta"
+
+# Deve voltar para a tela de login
+- assertVisible: "Bem-vindo à nossa loja!"
+- assertVisible: "Entrar"

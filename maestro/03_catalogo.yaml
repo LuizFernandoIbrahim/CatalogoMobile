@@ -1,0 +1,35 @@
+appId: com.oficina.catalogo
+---
+- launchApp
+
+# Garante que já está logado e na tela do Catálogo
+- assertVisible: "Catálogo"
+
+# Header fixo do catálogo
+- assertVisible: "Buscar produto..."
+
+# Testar busca
+- tapOn: "Buscar produto..."
+- inputText: "Almofada"
+- assertVisible: "Almofada Bordada"
+- eraseText
+- assertVisible: "Cesto Organizador"
+
+# Testar filtro de categoria
+- tapOn: "Decoração"
+- assertVisible: "Almofada Bordada"
+- tapOn: "Todos"
+
+# Pull to refresh (sincroniza com Firebase)
+- swipe:
+    start: 50%, 30%
+    end: 50%, 70%
+- assertVisible: "Catálogo"
+
+# Abrir detalhe de um produto
+- tapOn: "Almofada Bordada"
+- assertVisible: "Almofada Bordada"
+
+# Voltar para o catálogo
+- tapOn: "←"
+- assertVisible: "Catálogo"
