@@ -34,11 +34,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "react-native-webview",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Permitir que o aplicativo use Biometria."
+        }
+      ],
       [
         "expo-build-properties",
         {
           "android": {
-            "newArchEnabled": false
+            "newArchEnabled": false,
+            "forceDarkAllowed": false
           },
           "ios": {
             "newArchEnabled": false

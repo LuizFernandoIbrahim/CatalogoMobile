@@ -14,7 +14,15 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { getProducts, saveProduct, updateProduct, deleteProduct } from '../database/catalogo';
+// Importação do pacote de ícones do Expo
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  getProducts,
+  saveProductFirebase,
+  updateProductFirebase,
+  deleteProductFirebase,
+  sincronizarComFirebase,
+} from '../database/catalogo';
 import { FONT, RADIUS, SPACE, HP, vScale, mScale, scale } from '../utils/responsive';
 
 const CATEGORIES = ['Decoração', 'Uso Pessoal', 'Cozinha', 'Outros'];
@@ -26,6 +34,7 @@ export default function AdminScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
   const insets = useSafeAreaInsets();
 
   useFocusEffect(useCallback(() => { loadProducts(); }, []));
@@ -44,20 +53,42 @@ export default function AdminScreen() {
     if (!form.name || !form.price) return Alert.alert('Preencha nome e preço.');
     const price = parseFloat(form.price.replace(',', '.'));
     if (isNaN(price)) return Alert.alert('Preço inválido.');
-    const productData = { ...form, price };
-    if (editingProduct) {
-      await updateProduct({ ...editingProduct, ...productData });
-    } else {
-      await saveProduct(productData);
+
+    setSaving(true);
+    try {
+      const productData = { ...form, price };
+      if (editingProduct) {
+        await updateProductFirebase({ ...editingProduct, ...productData });
+      } else {
+        const id = Date.now().toString();
+        await saveProductFirebase({ ...productData, id });
+      }
+      await sincronizarComFirebase();
+      setModalVisible(false);
+      loadProducts();
+    } catch (e) {
+      Alert.alert('Erro ao salvar', 'Verifique sua conexão e tente novamente.');
+    } finally {
+      setSaving(false);
     }
-    setModalVisible(false);
-    loadProducts();
   }
 
   async function handleDelete(id) {
     Alert.alert('Confirmar', 'Deseja excluir este produto?', [
       { text: 'Cancelar' },
-      { text: 'Excluir', style: 'destructive', onPress: async () => { await deleteProduct(id); loadProducts(); } },
+      {
+        text: 'Excluir',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteProductFirebase(id);
+            await sincronizarComFirebase();
+            loadProducts();
+          } catch (e) {
+            Alert.alert('Erro ao excluir', 'Verifique sua conexão e tente novamente.');
+          }
+        },
+      },
     ]);
   }
 
@@ -68,14 +99,14 @@ export default function AdminScreen() {
         onPress: async () => {
           const { status } = await ImagePicker.requestCameraPermissionsAsync();
           if (status !== 'granted') return Alert.alert('Permissão negada.');
-          const result = await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+          const result = await ImagePicker.launchCameraAsync({ quality: 0.7 });
           if (!result.canceled) setForm({ ...form, photo: result.assets[0].uri });
         },
       },
       {
         text: 'Galeria',
         onPress: async () => {
-          const result = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+          const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
           if (!result.canceled) setForm({ ...form, photo: result.assets[0].uri });
         },
       },
@@ -90,7 +121,8 @@ export default function AdminScreen() {
           <Image source={{ uri: item.photo }} style={styles.thumb} />
         ) : (
           <View style={styles.thumbPlaceholder}>
-            <Text style={{ fontSize: mScale(22) }}>▧</Text>
+            {/* Ícone de imagem como placeholder */}
+            <MaterialCommunityIcons name="image-outline" size={mScale(24)} color="#9ca3af" />
           </View>
         )}
         <View style={styles.cardInfo}>
@@ -99,11 +131,13 @@ export default function AdminScreen() {
           <Text style={styles.cardPrice}>R$ {Number(item.price).toFixed(2).replace('.', ',')}</Text>
         </View>
         <View style={styles.cardActions}>
+          {/* Botão Editar com ícone de lápis vetorial */}
           <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(item)}>
-            <Text style={styles.actionIcon}>✎</Text>
+            <MaterialCommunityIcons name="pencil" size={mScale(18)} color="#1d4ed8" />
           </TouchableOpacity>
+          {/* Botão Excluir com ícone de lixeira vetorial */}
           <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
-            <Text style={styles.actionIcon}>🗑</Text>
+            <MaterialCommunityIcons name="trash-can-outline" size={mScale(18)} color="#dc2626" />
           </TouchableOpacity>
         </View>
       </View>
@@ -179,8 +213,7 @@ export default function AdminScreen() {
                 <TouchableOpacity
                   key={cat}
                   style={[styles.catChip, form.category === cat && styles.catChipActive]}
-                  onPress={() => setForm({ ...form, category: cat })}
-                >
+                  onPress={() => setForm({ ...form, category: cat })}>
                   <Text style={[styles.catChipText, form.category === cat && styles.catChipTextActive]}>
                     {cat}
                   </Text>
@@ -188,10 +221,10 @@ export default function AdminScreen() {
               ))}
             </View>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-              <Text style={styles.saveBtnText}>Salvar</Text>
+            <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.6 }]} onPress={handleSave} disabled={saving}>
+              <Text style={styles.saveBtnText}>{saving ? 'Salvando...' : 'Salvar'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelBtn} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity style={styles.cancelBtn} onPress={() => setModalVisible(false)} disabled={saving}>
               <Text style={styles.cancelBtnText}>Cancelar</Text>
             </TouchableOpacity>
           </ScrollView>
@@ -239,9 +272,23 @@ const styles = StyleSheet.create({
   cardCategory: { fontSize: FONT.xs, color: '#6b7280', marginTop: 2 },
   cardPrice: { fontSize: FONT.base, fontWeight: '800', color: '#402105', marginTop: 2 },
   cardActions: { flexDirection: 'row', gap: SPACE.xs },
-  editBtn: { padding: SPACE.sm, backgroundColor: '#eff6ff', borderRadius: RADIUS.sm },
-  deleteBtn: { padding: SPACE.sm, backgroundColor: '#fef2f2', borderRadius: RADIUS.sm },
-  actionIcon: { fontSize: mScale(16) },
+  
+  // Estilos dos botões ajustados para centralizar perfeitamente os ícones vetoriais
+  editBtn: { 
+    padding: SPACE.sm, 
+    backgroundColor: '#eff6ff', 
+    borderRadius: RADIUS.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteBtn: { 
+    padding: SPACE.sm, 
+    backgroundColor: '#fef2f2', 
+    borderRadius: RADIUS.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
   fab: {
     position: 'absolute',
     right: HP,

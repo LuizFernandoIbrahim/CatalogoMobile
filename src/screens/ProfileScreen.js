@@ -37,7 +37,7 @@ export default function ProfileScreen({ user, onLogout }) {
         onPress: async () => {
           const { status } = await ImagePicker.requestCameraPermissionsAsync();
           if (status !== 'granted') return Alert.alert('Permissão negada.');
-          const result = await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+          const result = await ImagePicker.launchCameraAsync({ quality: 0.7 });
           if (!result.canceled) {
             const uri = result.assets[0].uri;
             setPhoto(uri);
@@ -48,7 +48,7 @@ export default function ProfileScreen({ user, onLogout }) {
       {
         text: 'Galeria',
         onPress: async () => {
-          const result = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+          const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
           if (!result.canceled) {
             const uri = result.assets[0].uri;
             setPhoto(uri);

@@ -32,7 +32,9 @@ export default function MapScreen() {
 
   function openInMaps() {
     const url = `https://www.google.com/maps/search/?api=1&query=${STORE_LAT},${STORE_LNG}`;
-    Linking.openURL(url);
+    Linking.openURL(url).catch(() => {
+      alert('Não foi possível abrir o mapa.');
+    });
   }
 
   return (
@@ -75,14 +77,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#402105',
     paddingVertical: vScale(14),
     marginHorizontal: HP,
-    marginVertical: SPACE.md,
+    marginBottom: SPACE.md,
     borderRadius: RADIUS.md,
     alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#402105',
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
   },
   gmapsText: { color: '#fff', fontWeight: '700', fontSize: FONT.base },
 });

@@ -1,6 +1,9 @@
 import { getDatabase } from './banco';
 import NetInfo from '@react-native-community/netinfo';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import {
+  collection, query, where, getDocs,
+  doc, setDoc, updateDoc, deleteDoc,
+} from 'firebase/firestore';
 import { dbFirestore } from './firebase';
 
 async function atualizarEstruturaTabela(db) {
@@ -29,7 +32,7 @@ export async function sincronizarComFirebase() {
 
     const estadoConexao = await NetInfo.fetch();
     console.log("=== STATUS DA CONEXÃO ===", estadoConexao.isConnected);
-    
+
     if (!estadoConexao.isConnected) {
       console.log('Dispositivo offline. Sincronização pulada.');
       return;
@@ -41,30 +44,30 @@ export async function sincronizarComFirebase() {
     const ultimaAtualizacaoLocal = resultado?.max_date || 0;
     console.log("=== ULTIMA ATUALIZACAO LOCAL (SQLite) ===", ultimaAtualizacaoLocal);
 
-    const produtosRef = collection(dbFirestore, "produtos"); 
+    const produtosRef = collection(dbFirestore, "produtos");
     const q = query(produtosRef, where("updatedAt", ">", ultimaAtualizacaoLocal));
-    
+
     console.log("=== DISPARANDO QUERY NO FIREBASE ===");
     const querySnapshot = await getDocs(q);
 
     console.log("=== DOCUMENTOS ENCONTRADOS NO FIREBASE ===", querySnapshot.size);
 
     if (!querySnapshot.empty) {
-      for (const doc of querySnapshot.docs) {
-        const dadosNuvem = doc.data();
+      for (const docSnap of querySnapshot.docs) {
+        const dadosNuvem = docSnap.data();
         console.log("=== DADO QUE VEIO DA NUVEM ===", dadosNuvem);
-        
+
         await db.runAsync(
           `INSERT OR REPLACE INTO products (id, name, description, price, category, photo, updatedAt)
            VALUES (?, ?, ?, ?, ?, ?, ?)`,
           [
-            doc.id, // ID único gerado pelo Firestore
+            docSnap.id,
             dadosNuvem.name,
             dadosNuvem.description || null,
             Number(dadosNuvem.price) || 0,
             dadosNuvem.category || null,
             dadosNuvem.photo || null,
-            dadosNuvem.updatedAt || 0
+            dadosNuvem.updatedAt || 0,
           ]
         );
       }
@@ -77,56 +80,49 @@ export async function sincronizarComFirebase() {
   }
 }
 
-export async function saveProduct(product) {
+// ─── Funções de escrita no Firebase ──────────────────────────────────────────
+
+export async function saveProductFirebase(product) {
   try {
-    const db = await getDatabase();
-    await db.runAsync(
-      `INSERT INTO products (id, name, description, price, category, photo, updatedAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        product.id || Date.now().toString(),
-        product.name,
-        product.description || null,
-        Number(product.price) || 0,
-        product.category || null,
-        product.photo || null,
-        Date.now()
-      ]
-    );
+    const id = product.id || Date.now().toString();
+    const produtoRef = doc(dbFirestore, 'produtos', id);
+    await setDoc(produtoRef, {
+      name: product.name,
+      description: product.description || null,
+      price: Number(product.price) || 0,
+      category: product.category || null,
+      photo: product.photo || null,
+      updatedAt: Date.now(),
+    });
   } catch (e) {
-    console.log('Erro ao salvar produto:', e);
+    console.log('Erro ao salvar produto no Firebase:', e);
+    throw e;
   }
 }
 
-export async function updateProduct(product) {
+export async function updateProductFirebase(product) {
   try {
-    const db = await getDatabase();
-    await db.runAsync(
-      `UPDATE products
-       SET name = ?, description = ?, price = ?, category = ?, photo = ?, updatedAt = ?
-       WHERE id = ?`,
-      [
-        product.name,
-        product.description || null,
-        Number(product.price) || 0,
-        product.category || null,
-        product.photo || null,
-        Date.now(),
-        product.id,
-      ]
-    );
+    const produtoRef = doc(dbFirestore, 'produtos', product.id);
+    await updateDoc(produtoRef, {
+      name: product.name,
+      description: product.description || null,
+      price: Number(product.price) || 0,
+      category: product.category || null,
+      photo: product.photo || null,
+      updatedAt: Date.now(),
+    });
   } catch (e) {
-    console.log('Erro ao atualizar produto:', e);
+    console.log('Erro ao atualizar produto no Firebase:', e);
+    throw e;
   }
 }
 
-export async function deleteProduct(id) {
+export async function deleteProductFirebase(id) {
   try {
-    const db = await getDatabase();
-    await db.runAsync(
-      'DELETE FROM products WHERE id = ?', [id]
-    );
+    const produtoRef = doc(dbFirestore, 'produtos', id);
+    await deleteDoc(produtoRef);
   } catch (e) {
-    console.log('Erro ao deletar produto:', e);
+    console.log('Erro ao deletar produto no Firebase:', e);
+    throw e;
   }
 }

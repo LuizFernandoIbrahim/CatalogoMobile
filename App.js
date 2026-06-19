@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text, ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// Importação da StatusBar do Expo
+import { StatusBar } from 'expo-status-bar';
+
+// Importação do pacote de ícones do Expo
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AuthScreen from './src/screens/AuthScreen';
 import CatalogScreen from './src/screens/CatalogScreen';
@@ -18,11 +24,12 @@ import { FONT, vScale } from './src/utils/responsive';
 const Tab = createBottomTabNavigator();
 const CatalogStack = createStackNavigator();
 
+// Objeto de ícones atualizado para mapear as strings do MaterialCommunityIcons
 const ICONS = {
-  'Catálogo': '≡',
-  'Mapa': '⌖',
-  'Admin': '⚙',
-  'Perfil': '⌗',
+  'Catálogo': 'storefront-outline',
+  'Mapa': 'map-marker-radius-outline',
+  'Admin': 'store-cog-outline',
+  'Perfil': 'account-circle-outline',
 };
 
 function toBoolean(value) {
@@ -48,12 +55,18 @@ function AppTabs({ user, onLogout }) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => (
-          <Text style={{ fontSize: FONT.xl, lineHeight: FONT.xl * 1.2, opacity: focused ? 1 : 0.55 }}>
-            {ICONS[route.name] || ''}
-          </Text>
-        ),
-        tabBarActiveTintColor: '#000000',
+        // Usando o color que o próprio navigator passa dinamicamente (ativo/inativo)
+        tabBarIcon: ({ color }) => {
+          const iconName = ICONS[route.name] || 'help-circle-outline';
+          return (
+            <MaterialCommunityIcons 
+              name={iconName} 
+              size={vScale(22)} 
+              color={color} 
+            />
+          );
+        },
+        tabBarActiveTintColor: '#402105', // Mudado para combinar com a identidade do seu header/banner
         tabBarInactiveTintColor: '#9ca3af',
         tabBarLabelStyle: {
           fontSize: FONT.xs,
@@ -150,6 +163,9 @@ function Main() {
 export default function App() {
   return (
     <SafeAreaProvider>
+      {/* O estilo 'light' força os textos (relógio, notificações) a ficarem brancos */}
+      <StatusBar style="light" />
+      
       <Main />
     </SafeAreaProvider>
   );

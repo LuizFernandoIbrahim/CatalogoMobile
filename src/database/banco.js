@@ -2,49 +2,6 @@ import * as SQLite from 'expo-sqlite';
 
 let database = null;
 
-const PRODUTOS_INICIAIS = [
-  {
-    id: '1',
-    name: 'Tapete de Crochê Redondo',
-    description: 'Tapete artesanal feito à mão com fio 100% algodão.',
-    price: 89.90,
-    category: 'Decoração',
-    photo: null,
-  },
-  {
-    id: '2',
-    name: 'Cesto Organizador',
-    description: 'Cesto trançado em fibra natural, ideal para organizar o lar.',
-    price: 65.00,
-    category: 'Uso Pessoal',
-    photo: null,
-  },
-  {
-    id: '3',
-    name: 'Vaso de Macramê',
-    description: 'Vaso suspenso em macramê, perfeito para plantas pequenas.',
-    price: 45.00,
-    category: 'Outros',
-    photo: null,
-  },
-  {
-    id: '4',
-    name: 'Almofada Bordada',
-    description: 'Almofada com bordado floral feito à mão, enchimento incluso.',
-    price: 120.00,
-    category: 'Decoração',
-    photo: null,
-  },
-  {
-    id: '5',
-    name: 'Porta-retratos de Palha',
-    description: 'Porta-retratos artesanal trançado em palha natural.',
-    price: 38.50,
-    category: 'Outros',
-    photo: null,
-  },
-];
-
 export async function getDatabase() {
   if (database) return database;
 
@@ -79,35 +36,5 @@ export async function getDatabase() {
   `);
   console.log('✅ Tabelas criadas/verificadas');
 
-  await inserirProdutosIniciais(database);
-
   return database;
-}
-
-async function inserirProdutosIniciais(db) {
-  const existentes = await db.getFirstAsync(
-    'SELECT COUNT(*) as total FROM products'
-  );
-  console.log('📦 Produtos no banco:', existentes.total);
-
-  if (existentes.total > 0) {
-    console.log('ℹ️ Seed ignorado — banco já tem produtos');
-    return;
-  }
-
-  for (const produto of PRODUTOS_INICIAIS) {
-    await db.runAsync(
-      `INSERT INTO products (id, name, description, price, category, photo)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [
-        produto.id,
-        produto.name,
-        produto.description,
-        produto.price,
-        produto.category,
-        produto.photo,
-      ]
-    );
-  }
-  console.log('🌱 Produtos iniciais inseridos com sucesso');
 }
