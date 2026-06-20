@@ -5,8 +5,8 @@ Para iniciar o projeto:
 - npx expo start
 
 Para realizar os testes:
-Jest - npm test
-Maestro - maestro test maestro/
+- Jest - npm test
+- Maestro - maestro test maestro/
 
 Desenvolvedores:
 - Luiz Fernando Ibrahim Rebello Cabral - 202010081
