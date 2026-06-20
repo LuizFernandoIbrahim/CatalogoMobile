@@ -1,7 +1,7 @@
 import { getDatabase } from './banco';
 import NetInfo from '@react-native-community/netinfo';
 import {
-  collection, query, where, getDocs,
+  collection, getDocs,
   doc, setDoc, updateDoc, deleteDoc,
 } from 'firebase/firestore';
 import { dbFirestore } from './firebase';
@@ -38,49 +38,49 @@ export async function sincronizarComFirebase() {
       return;
     }
 
-    const resultado = await db.getFirstAsync(
-      'SELECT MAX(updatedAt) as max_date FROM products'
-    );
-    const ultimaAtualizacaoLocal = resultado?.max_date || 0;
-    console.log("=== ULTIMA ATUALIZACAO LOCAL (SQLite) ===", ultimaAtualizacaoLocal);
-
     const produtosRef = collection(dbFirestore, "produtos");
-    const q = query(produtosRef, where("updatedAt", ">", ultimaAtualizacaoLocal));
 
-    console.log("=== DISPARANDO QUERY NO FIREBASE ===");
-    const querySnapshot = await getDocs(q);
+    console.log("=== BUSCANDO TODOS OS PRODUTOS NO FIREBASE ===");
+    const querySnapshot = await getDocs(produtosRef);
 
     console.log("=== DOCUMENTOS ENCONTRADOS NO FIREBASE ===", querySnapshot.size);
 
-    if (!querySnapshot.empty) {
-      for (const docSnap of querySnapshot.docs) {
-        const dadosNuvem = docSnap.data();
-        console.log("=== DADO QUE VEIO DA NUVEM ===", dadosNuvem);
+    const idsNaNuvem = [];
 
-        await db.runAsync(
-          `INSERT OR REPLACE INTO products (id, name, description, price, category, photo, updatedAt)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [
-            docSnap.id,
-            dadosNuvem.name,
-            dadosNuvem.description || null,
-            Number(dadosNuvem.price) || 0,
-            dadosNuvem.category || null,
-            dadosNuvem.photo || null,
-            dadosNuvem.updatedAt || 0,
-          ]
-        );
-      }
-      console.log("=== SALVO NO SQLITE COM SUCESSO ===");
-    } else {
-      console.log("=== NENHUM DADO NOVO NA NUVEM ===");
+    for (const docSnap of querySnapshot.docs) {
+      const dadosNuvem = docSnap.data();
+      idsNaNuvem.push(docSnap.id);
+
+      await db.runAsync(
+        `INSERT OR REPLACE INTO products (id, name, description, price, category, photo, updatedAt)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          docSnap.id,
+          dadosNuvem.name,
+          dadosNuvem.description || null,
+          Number(dadosNuvem.price) || 0,
+          dadosNuvem.category || null,
+          dadosNuvem.photo || null,
+          dadosNuvem.updatedAt || 0,
+        ]
+      );
     }
+    console.log("=== SALVO NO SQLITE COM SUCESSO ===");
+
+    if (idsNaNuvem.length > 0) {
+      const placeholders = idsNaNuvem.map(() => '?').join(',');
+      await db.runAsync(
+        `DELETE FROM products WHERE id NOT IN (${placeholders})`,
+        idsNaNuvem
+      );
+    } else {
+      await db.runAsync('DELETE FROM products');
+    }
+    console.log("=== PRODUTOS REMOVIDOS DA NUVEM TAMBÉM REMOVIDOS LOCALMENTE ===");
   } catch (e) {
     console.log('=== ERRO CRÍTICO NA SINCRONIZAÇÃO ===', e);
   }
 }
-
-// ─── Funções de escrita no Firebase ──────────────────────────────────────────
 
 export async function saveProductFirebase(product) {
   try {

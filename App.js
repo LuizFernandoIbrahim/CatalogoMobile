@@ -2,14 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ActivityIndicator, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-// Importação da StatusBar do Expo
+import { ActivityIndicator, View, Text } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-
-// Importação do pacote de ícones do Expo
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AuthScreen from './src/screens/AuthScreen';
 import CatalogScreen from './src/screens/CatalogScreen';
@@ -24,11 +19,11 @@ import { FONT, vScale } from './src/utils/responsive';
 const Tab = createBottomTabNavigator();
 const CatalogStack = createStackNavigator();
 
-const ICONS = {
-  'Catálogo': 'storefront-outline',
-  'Mapa': 'map-marker-radius-outline',
-  'Admin': 'store-cog-outline',
-  'Perfil': 'account-circle-outline'
+const TAB_ICONS = {
+  'Catálogo': '≡',
+  'Mapa': '◎',
+  'Admin': '⚙',
+  'Perfil': '⌗',
 };
 
 function toBoolean(value) {
@@ -48,21 +43,42 @@ function CatalogStackScreen() {
 }
 
 function AppTabs({ user, onLogout }) {
+  const insets = useSafeAreaInsets();
+  const TAB_BAR_BASE_HEIGHT = 56;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => {
-          const iconName = ICONS[route.name] || 'help-circle-outline';
-          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+        headerShown: route.name !== 'Catálogo',
+        headerStyle: {
+          backgroundColor: '#402105',
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTintColor: '#ffffff',
+        headerTitleStyle: {
+          fontWeight: '800',
+          fontSize: FONT.lg,
+        },
+        tabBarIcon: ({ focused }) => {
+          const icon = TAB_ICONS[route.name] || '●';
+          return (
+            <Text style={{
+              fontSize: 22,
+              color: focused ? '#402105' : '#9ca3af',
+              fontWeight: 'bold',
+            }}>
+              {icon}
+            </Text>
+          );
         },
         tabBarActiveTintColor: '#402105',
         tabBarInactiveTintColor: '#9ca3af',
         tabBarStyle: {
-          height: vScale(60),
-          backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#e5e7eb',
+            backgroundColor: '#ffffff',
+            height: TAB_BAR_BASE_HEIGHT + insets.bottom,
+            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+            paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontSize: FONT.xs,
@@ -73,11 +89,11 @@ function AppTabs({ user, onLogout }) {
     >
       <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
       <Tab.Screen name="Mapa" component={MapScreen} />
-      
+
       {user?.isAdmin && (
         <Tab.Screen name="Admin" component={AdminScreen} />
       )}
-      
+
       <Tab.Screen name="Perfil">
         {() => <ProfileScreen user={user} onLogout={onLogout} />}
       </Tab.Screen>
@@ -88,7 +104,7 @@ function AppTabs({ user, onLogout }) {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" backgroundColor="#ffffff" translucent={false} />
+      <StatusBar style="light" backgroundColor="#402105" translucent={false} />
       <Main />
     </SafeAreaProvider>
   );
@@ -120,7 +136,7 @@ function Main() {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a0d02' }}>
-        <ActivityIndicator size=\"large\" color=\"#402105\" />
+        <ActivityIndicator size="large" color="#402105" />
       </View>
     );
   }

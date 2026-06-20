@@ -37,12 +37,6 @@
     },
     "plugins": [
       [
-        "expo-local-authentication",
-        {
-          "faceIDPermission": "Permitir que o aplicativo use a Biometria para login seguro."
-        }
-      ],
-      [
         "expo-build-properties",
         {
           "android": {
@@ -57,8 +51,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "d71aee68-6377-45ec-abb8-5407aa91c88f"
+        "projectId": "86011081-e760-4c04-91e6-3855dc4d77cd"
       }
-    }
+    },
+    "owner": "souza.marcos1"
   }
 }

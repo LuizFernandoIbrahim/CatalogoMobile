@@ -1,4 +1,7 @@
 node_modules
 .expo
+.env
+android
+dist
 .env.local
 .env*.local
