@@ -132,11 +132,11 @@ export default function AdminScreen() {
         </View>
         <View style={styles.cardActions}>
           {/* Botão Editar com ícone de lápis vetorial */}
-          <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(item)}>
+          <TouchableOpacity testID={`btn-edit-product-${item.id}`} style={styles.editBtn} onPress={() => openEdit(item)}>
             <MaterialCommunityIcons name="pencil" size={mScale(18)} color="#1d4ed8" />
           </TouchableOpacity>
           {/* Botão Excluir com ícone de lixeira vetorial */}
-          <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
+          <TouchableOpacity testID={`btn-delete-product-${item.id}`} style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
             <MaterialCommunityIcons name="trash-can-outline" size={mScale(18)} color="#dc2626" />
           </TouchableOpacity>
         </View>

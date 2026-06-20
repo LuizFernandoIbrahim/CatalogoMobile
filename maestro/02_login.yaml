@@ -1,5 +1,10 @@
 appId: com.oficina.catalogo
 ---
+# ATENÇÃO: este flow depende da ordem de execução dos arquivos da pasta maestro/.
+# 01_cadastro_admin.yaml roda DEPOIS de 01_cadastro.yaml (ordem alfabética) e usa
+# clearState: true, apagando o usuário "maestro@teste.com" criado em 01_cadastro.
+# Por isso aqui logamos com "admin@loja.com", que é o único usuário que sobrevive
+# até este ponto da suíte. Se a ordem dos arquivos mudar, revise este e-mail.
 - launchApp
 
 # Caso o app já esteja logado (sessão persistida do flow anterior),
@@ -9,7 +14,7 @@ appId: com.oficina.catalogo
       visible: "Bem-vindo à nossa loja!"
     commands:
       - tapOn: "E-mail"
-      - inputText: "maestro@teste.com"
+      - inputText: "admin@loja.com"
       - tapOn: "Senha"
       - inputText: "1234"
       - tapOn: "Entrar"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import AuthScreen from '../../screens/AuthScreen';
+import AuthScreen from '../../src/screens/AuthScreen';
 
 describe('Tela de Autenticação (AuthScreen)', () => {
   it('deve renderizar os elementos básicos da tela de login', async () => {

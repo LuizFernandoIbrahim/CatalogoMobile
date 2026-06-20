@@ -10,14 +10,14 @@ appId: com.oficina.catalogo
 
 # Testar busca
 - tapOn: "Buscar produto..."
-- inputText: "Almofada"
-- assertVisible: "Almofada Bordada"
+- inputText: "Organizador"
+- assertVisible: "Organizador de Mesa"
 - eraseText
-- assertVisible: "Cesto Organizador"
+- assertVisible: "Moedor de Pimenta e Sal"
 
 # Testar filtro de categoria
 - tapOn: "Decoração"
-- assertVisible: "Almofada Bordada"
+- assertVisible: "Luminário de Mesa"
 - tapOn: "Todos"
 
 # Pull to refresh (sincroniza com Firebase)
@@ -27,8 +27,10 @@ appId: com.oficina.catalogo
 - assertVisible: "Catálogo"
 
 # Abrir detalhe de um produto
-- tapOn: "Almofada Bordada"
-- assertVisible: "Almofada Bordada"
+- tapOn: "Luminário de Mesa"
+- extendedWaitUntil:
+    visible: "Luminário de Mesa"
+    timeout: 8000
 
 # Voltar para o catálogo
 - tapOn: "←"

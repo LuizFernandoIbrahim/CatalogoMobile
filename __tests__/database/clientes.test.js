@@ -1,6 +1,6 @@
 import { loginUser, saveUser } from '../../src/database/clientes';
 
-jest.mock('../../database/clientes', () => ({
+jest.mock('../../src/database/clientes', () => ({
   loginUser: jest.fn().mockResolvedValue({ id: '1', name: 'Marcos', email: 'marcos@email.com' }),
   saveUser: jest.fn().mockResolvedValue({ success: true }),
   isBiometricsEnabled: jest.fn().mockResolvedValue(true)
