@@ -4,7 +4,14 @@ Para iniciar o projeto:
 - npm install
 - npx expo start
 
+Para realizar os testes:
+Jest - npm test
+Maestro - maestro test maestro/
+
 Desenvolvedores:
 - Luiz Fernando Ibrahim Rebello Cabral - 202010081
 - Marcos Paulo Chagas Severiano de Souza - 202310779
-- Juan Felipe Rangel - 202313159 
+- Juan Felipe Rangel - 202313159
+
+APK:
+https://expo.dev/artifacts/eas/OA8tJt6DpyLTp4o8JuhhlvhBBdi085-e3Qng5KrIlbM.apk
